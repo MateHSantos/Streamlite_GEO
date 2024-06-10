@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 import teradata
-import win32com.client as win32
 from sqlalchemy import create_engine
 
 # Configurações da página
