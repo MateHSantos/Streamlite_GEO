@@ -2,7 +2,6 @@ import base64
 
 import numpy as np
 import pandas as pd
-import pyodbc
 import streamlit as st
 import teradata
 import win32com.client as win32
