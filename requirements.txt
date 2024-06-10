@@ -1,0 +1,8 @@
+streamlit
+pandas
+numpy
+openpyxl
+teradata
+win32com.client
+sqlalchemy
+
