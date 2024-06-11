@@ -179,8 +179,8 @@ else:
 
         if option == 'Store Visit':
 
-            loja_input = st.text_input("Digite o Código da Loja")
-            email_input = st.text_input("Digite o Email")
+    loja_input = st.text_input("Digite o Código da Loja")
+    email_input = st.text_input("Digite o Email")
 
         if loja_input and email_input:
             loja = int(loja_input)
