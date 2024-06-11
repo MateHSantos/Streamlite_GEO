@@ -97,7 +97,6 @@ else:
                 "Para verificar nossos DashBoards [Clique aqui](https://app.powerbi.com/groups/me/apps/9190d269-d305-4cb8-bbb1-a63a633498a6/reports/9a0e6a1d-8b2e-4cf2-a544-54fc20d8f97b/ReportSection66f47a334e97cc09a9ab?experience=power-bi)")
 
     elif option == 'Comparação de Lojas':
-        # Carregar dados de comparação de lojas a partir de um arquivo Excel
         prox = pd.read_excel('Comparacao_Lojas.xlsx')
 
         loja_input = st.text_input("Digite o número da loja")
@@ -123,7 +122,6 @@ else:
             if 'distance' in prox.columns:
                 prox = prox.drop(columns=['distance'])
 
-            # Seleciona apenas as colunas desejadas
             columns_to_display = ['Loja', 'Formato', 'MicroRegiaoFinal',
                                   'QTD_TAMANHO_AREA_VENDA', 'MEDIA_DIARIA_VENDA']
             display_prox(prox, loja, columns_to_display)
@@ -161,11 +159,24 @@ else:
             pivot_df = pd.concat([pivot_df, total_row_df], ignore_index=True)
 
             st.write(pivot_df)
-            if st.button('Download CSV'):
-                csv = pivot_df.to_csv(index=False)
+
+            # Função para download do CSV
+            def download_csv(df):
+                # Selecione as colunas necessárias
+                df = df[['NOM_DEPTO', 'NOM_PLU',
+                         'COD_PLU', loja1, loja2, '∆ Delta']]
+
+                # Converta o DataFrame para CSV e depois para base64
+                csv = df.to_csv(index=False)
                 b64 = base64.b64encode(csv.encode()).decode()
+
+                # Crie um link de download
                 href = f'<a href="data:file/csv;base64,{b64}" download="comparacao_sortimento.csv">Clique aqui para Baixar CSV</a>'
                 st.markdown(href, unsafe_allow_html=True)
+
+            # Chame a função quando o botão 'Download CSV' for clicado
+            if st.button('Download CSV'):
+                download_csv(pivot_df)
 
     elif option == 'DDP D0':
         caminho_arquivo = 'DDP_D0.xlsx'
