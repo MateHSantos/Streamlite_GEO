@@ -179,8 +179,9 @@ else:
 
         if option == 'Store Visit':
 
-    loja_input = st.text_input("Digite o Código da Loja")
-    email_input = st.text_input("Digite o Email")
+            loja_input = st.text_input("Digite o Código da Loja")
+            email_input = st.text_input("Digite o Email")
+
 
         if loja_input and email_input:
             loja = int(loja_input)
@@ -205,26 +206,26 @@ else:
             st.write(f"Tentando abrir o arquivo: {absolute_path}")
 
             if os.path.exists(absolute_path):
-                try:
-                    with open(absolute_path, "rb") as attachment:
-                        part = MIMEBase('application', 'octet-stream')
-                        part.set_payload(attachment.read())
-                        encoders.encode_base64(part)
-                        part.add_header('Content-Disposition',
-                                        f'attachment; filename={os.path.basename(filename)}')
+                    try:
+                        with open(absolute_path, "rb") as attachment:
+                            part = MIMEBase('application', 'octet-stream')
+                            part.set_payload(attachment.read())
+                            encoders.encode_base64(part)
+                            part.add_header('Content-Disposition',
+                                            f'attachment; filename={os.path.basename(filename)}')
 
-                        msg.attach(part)
+                            msg.attach(part)
 
-                    with smtplib.SMTP(smtp_server, smtp_port) as server:
-                        server.starttls()
-                        server.login(smtp_user, smtp_password)
-                        server.sendmail(smtp_user, email, msg.as_string())
+                        with smtplib.SMTP(smtp_server, smtp_port) as server:
+                            server.starttls()
+                            server.login(smtp_user, smtp_password)
+                            server.sendmail(smtp_user, email, msg.as_string())
 
-                    st.success('E-mail enviado com sucesso!')
-                except Exception as e:
-                    st.error(f"Erro ao enviar e-mail: {str(e)}")
-            else:
-                st.error(f"Arquivo não encontrado: {absolute_path}")
+                        st.success('E-mail enviado com sucesso!')
+                    except Exception as e:
+                        st.error(f"Erro ao enviar e-mail: {str(e)}")
+                else:
+                    st.error(f"Arquivo não encontrado: {absolute_path}")
 
     elif option == 'Quadro de Funcionarios':
         # Carregar dados do quadro de funcionários a partir de um arquivo Excel
