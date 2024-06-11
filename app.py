@@ -181,7 +181,7 @@ else:
             mail.Subject = 'Store Visit da Loja'
             mail.To = email
 
-            filename = f'//pafs05/geo_analytics_dash$/30 - Store Visit/Refeito/PDF/{loja}.pdf'
+            filename = f'PDF/{loja}.pdf'
             attachment = filename
             mail.Attachments.Add(attachment)
             mail.Send()
