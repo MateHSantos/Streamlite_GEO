@@ -148,18 +148,16 @@ else:
                     f"As lojas '{loja1}' e '{loja2}' não existem no DataFrame.")
 
             # Calcular a linha de total
-            # Calcular a linha de total
-        total_row = {
-            'NOM_DEPTO': 'Total',
-            loja1: pivot_df[loja1].count(),
-            loja2: pivot_df[loja2].count(),
-            '∆ Delta': pivot_df['∆ Delta'].abs().count()
-        }
+            total_row = {
+                'NOM_DEPTO': 'Total',
+                loja1: pivot_df[loja1].sum(),
+                loja2: pivot_df[loja2].sum(),
+                '∆ Delta': pivot_df['∆ Delta'].abs().sum()
+            }
 
-        # Adicionar a linha "Total" ao DataFrame
-        total_row_df = pd.DataFrame(total_row, index=[0])
-        pivot_df = pivot_df.append(total_row_df, ignore_index=True)
-
+            # Adicionar a linha "Total" ao DataFrame
+            total_row_df = pd.DataFrame(total_row, index=[0])
+            pivot_df = pd.concat([pivot_df, total_row_df], ignore_index=True)
 
             st.write(pivot_df)
             if st.button('Download CSV'):
