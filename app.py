@@ -147,11 +147,25 @@ else:
                 st.write(
                     f"As lojas '{loja1}' e '{loja2}' não existem no DataFrame.")
 
+            # Calcular a linha de total
+            # Calcular a linha de total
+        total_row = {
+            'NOM_DEPTO': 'Total',
+            loja1: pivot_df[loja1].count(),
+            loja2: pivot_df[loja2].count(),
+            '∆ Delta': pivot_df['∆ Delta'].abs().count()
+        }
+
+        # Adicionar a linha "Total" ao DataFrame
+        total_row_df = pd.DataFrame(total_row, index=[0])
+        pivot_df = pivot_df.append(total_row_df, ignore_index=True)
+
+
             st.write(pivot_df)
             if st.button('Download CSV'):
-                csv = df.to_csv(index=False)
+                csv = pivot_df.to_csv(index=False)
                 b64 = base64.b64encode(csv.encode()).decode()
-                href = f'<a href=\"data:file/csv;base64,{b64}\" download=\"download.csv\">Clique aqui para Baixar CSV</a>'
+                href = f'<a href="data:file/csv;base64,{b64}" download="comparacao_sortimento.csv">Clique aqui para Baixar CSV</a>'
                 st.markdown(href, unsafe_allow_html=True)
 
     elif option == 'DDP D0':
@@ -205,7 +219,6 @@ else:
                     st.success('Solicitação enviada com sucesso!')
                 except Exception as e:
                     st.error(f"Erro ao enviar solicitação: {str(e)}")
-
 
     elif option == 'Quadro de Funcionarios':
         # Carregar dados do quadro de funcionários a partir de um arquivo Excel
