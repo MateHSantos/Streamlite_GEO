@@ -175,7 +175,7 @@ else:
 
             # Chame a função quando o botão 'Download CSV' for clicado
             if st.button('Download CSV'):
-            download_csv(df_filtrado, loja1, loja2)
+                download_csv(df_filtrado, loja1, loja2)
 
     elif option == 'DDP D0':
         caminho_arquivo = 'DDP_D0.xlsx'
