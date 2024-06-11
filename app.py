@@ -147,7 +147,7 @@ else:
             loja2 = int(loja2_input)
             df_filtrado = consultar_teradata(loja1, loja2)
 
-            pivot_df = df_filtrado.pivot_table(index=['NOM_DEPTO','NOM_PLU','COD_PLU'],
+            pivot_df = df_filtrado.pivot_table(index=['NOM_DEPTO'],
                                     columns='COD_LOJA', values='COD_PLU', aggfunc='count', fill_value=0)
             pivot_df = pivot_df.dropna(how='all').fillna(0)
             pivot_df.columns.name = None
