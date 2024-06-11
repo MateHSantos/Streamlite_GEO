@@ -181,45 +181,31 @@ else:
             loja = int(loja_input)
             email = email_input
 
-            # Configurações do servidor SMTP
-            smtp_server = 'smtp.outlook.com'
-            smtp_port = 587
-            smtp_user = 'mateus.santos2@gpabr.com'
-            smtp_password = 'Gpa@982110764'
+            if st.button('Solicitar'):
+                # Configurações do servidor SMTP
+                smtp_server = 'smtp.outlook.com'
+                smtp_port = 587
+                smtp_user = 'mateus.santos2@gpabr.com'
+                smtp_password = 'Gpa@982110764'
 
-            msg = MIMEMultipart()
-            msg['From'] = smtp_user
-            msg['To'] = email
-            msg['Subject'] = 'Store Visit da Loja'
+                msg = MIMEMultipart()
+                msg['From'] = smtp_user
+                msg['To'] = smtp_user
+                msg['Subject'] = 'Solicitação de Store visit'
 
-            body = 'Segue em anexo o PDF da loja solicitada.'
-            msg.attach(MIMEText(body, 'plain'))
+                body = f'O usuário solicitou um Store Visit para a loja {loja} com o e-mail {email}.'
+                msg.attach(MIMEText(body, 'plain'))
 
-            filename = f'PDF/{loja}.pdf'
-            absolute_path = os.path.abspath(filename)
-            st.write(f"Tentando abrir o arquivo: {absolute_path}")
-
-            if os.path.exists(absolute_path):
                 try:
-                    with open(absolute_path, "rb") as attachment:
-                        part = MIMEBase('application', 'octet-stream')
-                        part.set_payload(attachment.read())
-                        encoders.encode_base64(part)
-                        part.add_header('Content-Disposition',
-                                        f'attachment; filename={os.path.basename(filename)}')
-
-                        msg.attach(part)
-
                     with smtplib.SMTP(smtp_server, smtp_port) as server:
                         server.starttls()
                         server.login(smtp_user, smtp_password)
-                        server.sendmail(smtp_user, email, msg.as_string())
+                        server.sendmail(smtp_user, smtp_user, msg.as_string())
 
-                    st.success('E-mail enviado com sucesso!')
+                    st.success('Solicitação enviada com sucesso!')
                 except Exception as e:
-                    st.error(f"Erro ao enviar e-mail: {str(e)}")
-            else:
-                st.error(f"Arquivo não encontrado: {absolute_path}")
+                    st.error(f"Erro ao enviar solicitação: {str(e)}")
+
 
     elif option == 'Quadro de Funcionarios':
         # Carregar dados do quadro de funcionários a partir de um arquivo Excel
