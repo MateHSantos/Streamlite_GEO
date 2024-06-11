@@ -27,6 +27,16 @@ st.set_page_config(
 # Carregar dados
 data = pd.read_excel('Acesso.xlsx')
 
+# Função para download do CSV
+def download_csv(df):
+    # Converta o DataFrame para CSV e depois para base64
+    csv = df.to_csv(index=False)
+    b64 = base64.b64encode(csv.encode()).decode()
+
+    # Crie um link de download
+    href = f'<a href="data:file/csv;base64,{b64}" download="comparacao_sortimento.csv">Clique aqui para Baixar CSV</a>'
+    st.markdown(href, unsafe_allow_html=True)
+
 
 # Inicializar o estado da sessão, se necessário
 if 'logged_in' not in st.session_state:
@@ -132,10 +142,10 @@ else:
         if loja1_input and loja2_input:
             loja1 = int(loja1_input)
             loja2 = int(loja2_input)
-            df = consultar_teradata(loja1, loja2)
+            df_filtrado = consultar_teradata(loja1, loja2)
 
-            pivot_df = df.pivot_table(index=['NOM_DEPTO'],
-                                      columns='COD_LOJA', values='COD_PLU', aggfunc='count', fill_value=0)
+            pivot_df = df_filtrado.pivot_table(index=['NOM_DEPTO'],
+                                    columns='COD_LOJA', values='COD_PLU', aggfunc='count', fill_value=0)
             pivot_df = pivot_df.dropna(how='all').fillna(0)
             pivot_df.columns.name = None
             pivot_df = pivot_df.reset_index()
@@ -160,23 +170,9 @@ else:
 
             st.write(pivot_df)
 
-            # Função para download do CSV
-            def download_csv(df):
-                # Selecione as colunas necessárias
-                df = df[['NOM_DEPTO', 'NOM_PLU',
-                         'COD_PLU', loja1, loja2, '∆ Delta']]
-
-                # Converta o DataFrame para CSV e depois para base64
-                csv = df.to_csv(index=False)
-                b64 = base64.b64encode(csv.encode()).decode()
-
-                # Crie um link de download
-                href = f'<a href="data:file/csv;base64,{b64}" download="comparacao_sortimento.csv">Clique aqui para Baixar CSV</a>'
-                st.markdown(href, unsafe_allow_html=True)
-
             # Chame a função quando o botão 'Download CSV' for clicado
             if st.button('Download CSV'):
-                download_csv(df)
+                download_csv(df_filtrado)
 
     elif option == 'DDP D0':
         caminho_arquivo = 'DDP_D0.xlsx'
