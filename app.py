@@ -243,7 +243,7 @@ else:
         )
 
         if loja_option == 'PÃO DE AÇÚCAR':
-            caminho_do_arquivo = "//pafs05/Equipe_geo$/1. Gerência - Processos Mercearia & NAL/13. Painel FAROL diario/PDF/GPA_FAROL_Painel_PA_v4.pdf"
+            caminho_do_arquivo = "GPA_FAROL_Painel_PA_v4.pdf"
             with open(caminho_do_arquivo, "rb") as file:
                 st.download_button(
                     label="Baixar PDF de PÃO DE AÇÚCAR",
@@ -252,7 +252,7 @@ else:
                     mime="application/pdf"
                 )
         elif loja_option == 'MERCADO EXTRA':
-            caminho_do_arquivo = "//pafs05/Equipe_geo$/1. Gerência - Processos Mercearia & NAL/13. Painel FAROL diario/PDF/GPA_FAROL_Painel_ME_v4.pdf"
+            caminho_do_arquivo = "GPA_FAROL_Painel_ME_v4.pdf"
             with open(caminho_do_arquivo, "rb") as file:
                 st.download_button(
                     label="Baixar PDF de MERCADO EXTRA",
