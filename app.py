@@ -179,47 +179,48 @@ else:
         email_input = st.text_input("Digite o Email")
 
         if loja_input and email_input:
-        loja = int(loja_input)
-        email = email_input
+            loja = int(loja_input)
+            email = email_input
 
-        # Configurações do servidor SMTP
-        smtp_server = 'smtp.outlook.com'
-        smtp_port = 587
-        smtp_user = 'mateus.santos2@gpabr.com'
-        smtp_password = 'Gpa@982110764'
+            # Configurações do servidor SMTP
+            smtp_server = 'smtp.outlook.com'
+            smtp_port = 587
+            smtp_user = 'mateus.santos2@gpabr.com'
+            smtp_password = 'Gpa@982110764'
 
-        msg = MIMEMultipart()
-        msg['From'] = smtp_user
-        msg['To'] = email
-        msg['Subject'] = 'Store Visit da Loja'
+            msg = MIMEMultipart()
+            msg['From'] = smtp_user
+            msg['To'] = email
+            msg['Subject'] = 'Store Visit da Loja'
 
-        body = 'Segue em anexo o PDF da loja solicitada.'
-        msg.attach(MIMEText(body, 'plain'))
+            body = 'Segue em anexo o PDF da loja solicitada.'
+            msg.attach(MIMEText(body, 'plain'))
 
-        filename = f'PDF/{loja}.pdf'
-        try:
-            attachment = open(filename, "rb")
+            filename = f'PDF/{loja}.pdf'
+            try:
+                attachment = open(filename, "rb")
 
-            part = MIMEBase('application', 'octet-stream')
-            part.set_payload((attachment).read())
-            encoders.encode_base64(part)
-            part.add_header('Content-Disposition', f'attachment; filename={filename}')
+                part = MIMEBase('application', 'octet-stream')
+                part.set_payload((attachment).read())
+                encoders.encode_base64(part)
+                part.add_header('Content-Disposition',
+                                f'attachment; filename={filename}')
 
-            msg.attach(part)
-            attachment.close()
+                msg.attach(part)
+                attachment.close()
 
-            server = smtplib.SMTP(smtp_server, smtp_port)
-            server.starttls()
-            server.login(smtp_user, smtp_password)
-            text = msg.as_string()
-            server.sendmail(smtp_user, email, text)
-            server.quit()
+                server = smtplib.SMTP(smtp_server, smtp_port)
+                server.starttls()
+                server.login(smtp_user, smtp_password)
+                text = msg.as_string()
+                server.sendmail(smtp_user, email, text)
+                server.quit()
 
-            st.success('E-mail enviado com sucesso!')
-        except FileNotFoundError:
-            st.error(f"Arquivo não encontrado: {filename}")
-        except Exception as e:
-            st.error(f"Erro ao enviar e-mail: {str(e)}")
+                st.success('E-mail enviado com sucesso!')
+            except FileNotFoundError:
+                st.error(f"Arquivo não encontrado: {filename}")
+            except Exception as e:
+                st.error(f"Erro ao enviar e-mail: {str(e)}")
 
     elif option == 'Quadro de Funcionarios':
         # Carregar dados do quadro de funcionários a partir de um arquivo Excel
