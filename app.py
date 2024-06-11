@@ -1,5 +1,10 @@
 import base64
 import platform
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
 
 import numpy as np
 import pandas as pd
@@ -174,19 +179,47 @@ else:
         email_input = st.text_input("Digite o Email")
 
         if loja_input and email_input:
-            loja = int(loja_input)
-            email = email_input
-            outlook = win32.Dispatch('outlook.application')
-            mail = outlook.CreateItem(0)
-            mail.Subject = 'Store Visit da Loja'
-            mail.To = email
+        loja = int(loja_input)
+        email = email_input
 
-            filename = f'PDF/{loja}.pdf'
-            attachment = filename
-            mail.Attachments.Add(attachment)
-            mail.Send()
+        # Configurações do servidor SMTP
+        smtp_server = 'smtp.outlook.com'
+        smtp_port = 587
+        smtp_user = 'mateus.santos2@gpabr.com'
+        smtp_password = 'Gpa@982110764'
+
+        msg = MIMEMultipart()
+        msg['From'] = smtp_user
+        msg['To'] = email
+        msg['Subject'] = 'Store Visit da Loja'
+
+        body = 'Segue em anexo o PDF da loja solicitada.'
+        msg.attach(MIMEText(body, 'plain'))
+
+        filename = f'PDF/{loja}.pdf'
+        try:
+            attachment = open(filename, "rb")
+
+            part = MIMEBase('application', 'octet-stream')
+            part.set_payload((attachment).read())
+            encoders.encode_base64(part)
+            part.add_header('Content-Disposition', f'attachment; filename={filename}')
+
+            msg.attach(part)
+            attachment.close()
+
+            server = smtplib.SMTP(smtp_server, smtp_port)
+            server.starttls()
+            server.login(smtp_user, smtp_password)
+            text = msg.as_string()
+            server.sendmail(smtp_user, email, text)
+            server.quit()
 
             st.success('E-mail enviado com sucesso!')
+        except FileNotFoundError:
+            st.error(f"Arquivo não encontrado: {filename}")
+        except Exception as e:
+            st.error(f"Erro ao enviar e-mail: {str(e)}")
 
     elif option == 'Quadro de Funcionarios':
         # Carregar dados do quadro de funcionários a partir de um arquivo Excel
