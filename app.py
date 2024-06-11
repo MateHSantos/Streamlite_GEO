@@ -173,15 +173,11 @@ else:
                 st.markdown(href, unsafe_allow_html=True)
 
     elif option == 'Store Visit':
-        caminho_arquivo = '//pafs05/geo_analytics_dash$/29 - Streamlit/PDF/'
-        df = pd.read_excel(caminho_arquivo)
 
         loja_input = st.text_input("Digite o Código da Loja")
         email_input = st.text_input("Digite o Email")
 
         if option == 'Store Visit':
-            caminho_arquivo = '//pafs05/geo_analytics_dash$/29 - Streamlit/PDF/'
-            df = pd.read_excel(caminho_arquivo)
 
             loja_input = st.text_input("Digite o Código da Loja")
             email_input = st.text_input("Digite o Email")
