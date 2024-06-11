@@ -28,7 +28,10 @@ st.set_page_config(
 data = pd.read_excel('Acesso.xlsx')
 
 # Função para download do CSV
-def download_csv(df):
+def download_csv(df, loja1, loja2):
+    # Selecione as colunas necessárias
+    df = df[['NOM_DEPTO', 'NOM_PLU', 'COD_PLU', loja1, loja2, '∆ Delta']]
+
     # Converta o DataFrame para CSV e depois para base64
     csv = df.to_csv(index=False)
     b64 = base64.b64encode(csv.encode()).decode()
@@ -172,7 +175,7 @@ else:
 
             # Chame a função quando o botão 'Download CSV' for clicado
             if st.button('Download CSV'):
-                download_csv(df_filtrado)
+            download_csv(df_filtrado, loja1, loja2)
 
     elif option == 'DDP D0':
         caminho_arquivo = 'DDP_D0.xlsx'
