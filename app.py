@@ -173,11 +173,18 @@ else:
                 st.markdown(href, unsafe_allow_html=True)
 
     elif option == 'Store Visit':
-        caminho_arquivo = 'DDP_D0.xlsx'
+        caminho_arquivo = '//pafs05/geo_analytics_dash$/29 - Streamlit/PDF/'
         df = pd.read_excel(caminho_arquivo)
 
         loja_input = st.text_input("Digite o Código da Loja")
         email_input = st.text_input("Digite o Email")
+
+        if option == 'Store Visit':
+            caminho_arquivo = '//pafs05/geo_analytics_dash$/29 - Streamlit/PDF/'
+            df = pd.read_excel(caminho_arquivo)
+
+            loja_input = st.text_input("Digite o Código da Loja")
+            email_input = st.text_input("Digite o Email")
 
         if loja_input and email_input:
             loja = int(loja_input)
@@ -197,10 +204,13 @@ else:
             body = 'Segue em anexo o PDF da loja solicitada.'
             msg.attach(MIMEText(body, 'plain'))
 
-            filename = f'{loja}.pdf'
-            if os.path.exists(filename):
+            filename = f'PDF/{loja}.pdf'
+            absolute_path = os.path.abspath(filename)
+            st.write(f"Tentando abrir o arquivo: {absolute_path}")
+
+            if os.path.exists(absolute_path):
                 try:
-                    with open(filename, "rb") as attachment:
+                    with open(absolute_path, "rb") as attachment:
                         part = MIMEBase('application', 'octet-stream')
                         part.set_payload(attachment.read())
                         encoders.encode_base64(part)
@@ -218,7 +228,7 @@ else:
                 except Exception as e:
                     st.error(f"Erro ao enviar e-mail: {str(e)}")
             else:
-                st.error(f"Arquivo não encontrado: {filename}")
+                st.error(f"Arquivo não encontrado: {absolute_path}")
 
     elif option == 'Quadro de Funcionarios':
         # Carregar dados do quadro de funcionários a partir de um arquivo Excel
