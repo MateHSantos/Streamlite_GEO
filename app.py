@@ -196,7 +196,7 @@ else:
             body = 'Segue em anexo o PDF da loja solicitada.'
             msg.attach(MIMEText(body, 'plain'))
 
-            filename = f'PDF/{loja}.pdf'
+            filename = f'//pafs05/geo_analytics_dash$/29 - Streamlit/PDF/{loja}.pdf'
             try:
                 attachment = open(filename, "rb")
 
