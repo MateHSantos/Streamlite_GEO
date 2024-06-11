@@ -29,7 +29,8 @@ data = pd.read_excel('Acesso.xlsx')
 
 # Função para download do CSV
 def download_csv(df, loja1, loja2):
-    # Selecione as colunas necessárias
+    # Filtrar as colunas necessárias e adicionar a coluna ∆ Delta
+    df['∆ Delta'] = df[loja1] - df[loja2]
     df = df[['NOM_DEPTO', 'NOM_PLU', 'COD_PLU', loja1, loja2, '∆ Delta']]
 
     # Converta o DataFrame para CSV e depois para base64
@@ -156,8 +157,7 @@ else:
             if loja1 in pivot_df.columns and loja2 in pivot_df.columns:
                 pivot_df['∆ Delta'] = pivot_df[loja1] - pivot_df[loja2]
             else:
-                st.write(
-                    f"As lojas '{loja1}' e '{loja2}' não existem no DataFrame.")
+                st.write(f"As lojas '{loja1}' e '{loja2}' não existem no DataFrame.")
 
             # Calcular a linha de total
             total_row = {
@@ -172,6 +172,10 @@ else:
             pivot_df = pd.concat([pivot_df, total_row_df], ignore_index=True)
 
             st.write(pivot_df)
+
+            # Adicionar colunas de loja ao DataFrame original para download
+            df_filtrado[loja1] = df_filtrado.apply(lambda row: 1 if row['COD_LOJA'] == loja1 else 0, axis=1)
+            df_filtrado[loja2] = df_filtrado.apply(lambda row: 1 if row['COD_LOJA'] == loja2 else 0, axis=1)
 
             # Chame a função quando o botão 'Download CSV' for clicado
             if st.button('Download CSV'):
