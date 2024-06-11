@@ -1,4 +1,5 @@
 import base64
+import os
 import platform
 import smtplib
 from email import encoders
