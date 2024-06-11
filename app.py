@@ -28,23 +28,6 @@ st.set_page_config(
 data = pd.read_excel('Acesso.xlsx')
 
 
-def download_csv(df):
-    # Selecione as colunas necessárias
-    df = df[['NOM_DEPTO', 'NOM_PLU', 'COD_PLU', loja1, loja2, '∆ Delta']]
-
-    # Converta o DataFrame para CSV e depois para base64
-    csv = df.to_csv(index=False)
-    b64 = base64.b64encode(csv.encode()).decode()
-
-    # Crie um link de download
-    href = f'<a href="data:file/csv;base64,{b64}" download="comparacao_sortimento.csv">Clique aqui para Baixar CSV</a>'
-    st.markdown(href, unsafe_allow_html=True)
-
-
-# Chame a função quando o botão 'Download CSV' for clicado
-if st.button('Download CSV'):
-    download_csv(pivot_df)
-
 # Inicializar o estado da sessão, se necessário
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
