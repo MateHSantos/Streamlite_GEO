@@ -197,7 +197,7 @@ else:
             body = 'Segue em anexo o PDF da loja solicitada.'
             msg.attach(MIMEText(body, 'plain'))
 
-            filename = f'PDF/{loja}.pdf'
+            filename = f'{loja}.pdf'
             if os.path.exists(filename):
                 try:
                     with open(filename, "rb") as attachment:
