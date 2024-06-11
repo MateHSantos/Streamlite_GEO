@@ -1,10 +1,10 @@
 import base64
 import platform
 import smtplib
+from email import encoders
+from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
-from email import encoders
 
 import numpy as np
 import pandas as pd
@@ -196,31 +196,28 @@ else:
             body = 'Segue em anexo o PDF da loja solicitada.'
             msg.attach(MIMEText(body, 'plain'))
 
-            filename = f'//pafs05/geo_analytics_dash$/29 - Streamlit/PDF/{loja}.pdf'
-            try:
-                attachment = open(filename, "rb")
+            filename = f'PDF/{loja}.pdf'
+            if os.path.exists(filename):
+                try:
+                    with open(filename, "rb") as attachment:
+                        part = MIMEBase('application', 'octet-stream')
+                        part.set_payload(attachment.read())
+                        encoders.encode_base64(part)
+                        part.add_header('Content-Disposition',
+                                        f'attachment; filename={os.path.basename(filename)}')
 
-                part = MIMEBase('application', 'octet-stream')
-                part.set_payload((attachment).read())
-                encoders.encode_base64(part)
-                part.add_header('Content-Disposition',
-                                f'attachment; filename={filename}')
+                        msg.attach(part)
 
-                msg.attach(part)
-                attachment.close()
+                    with smtplib.SMTP(smtp_server, smtp_port) as server:
+                        server.starttls()
+                        server.login(smtp_user, smtp_password)
+                        server.sendmail(smtp_user, email, msg.as_string())
 
-                server = smtplib.SMTP(smtp_server, smtp_port)
-                server.starttls()
-                server.login(smtp_user, smtp_password)
-                text = msg.as_string()
-                server.sendmail(smtp_user, email, text)
-                server.quit()
-
-                st.success('E-mail enviado com sucesso!')
-            except FileNotFoundError:
+                    st.success('E-mail enviado com sucesso!')
+                except Exception as e:
+                    st.error(f"Erro ao enviar e-mail: {str(e)}")
+            else:
                 st.error(f"Arquivo não encontrado: {filename}")
-            except Exception as e:
-                st.error(f"Erro ao enviar e-mail: {str(e)}")
 
     elif option == 'Quadro de Funcionarios':
         # Carregar dados do quadro de funcionários a partir de um arquivo Excel
