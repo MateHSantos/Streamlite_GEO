@@ -76,7 +76,7 @@ else:
         st.write(prox_comparacao[columns_to_display])
 
     def consultar_teradata(loja1, loja2):
-        caminho_arquivo = 'C:/Users/5330777/OneDrive/Onedrive - GPA/Documentos/Sortimento.xlsx'
+        caminho_arquivo = 'Sortimento.xlsx'
         df = pd.read_excel(caminho_arquivo)
         lojas = [loja1, loja2]
         df_filtrado = df[df['COD_LOJA'].isin(lojas)]
